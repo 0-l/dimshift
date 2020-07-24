@@ -73,17 +73,19 @@ class Render
   end
 end
 
-class Redshift
+class Dimshift
   def initialize
     @stty = Stty.new
     @render = Render.new
     @bindings = %w(h l)
-    @position = 10
     @base_temperature = 6500
-    @temperature = 6500
+    @temperature = current_temp()
+    @position = (@temperature * 10) / @base_temperature
 
     @stty.disable_echo
     @stty.hide_cursor
+
+    set_temperature()
 
     loop do
       @render.update @position, @temperature
@@ -91,18 +93,19 @@ class Redshift
       input = STDIN.getc.chr
 
       set_position(input)
-      set_temperature(temperature())
+      set_temperature()
 
       quit if input == 'q'
     end
   end
 
-  def temperature
-    @temperature = (((@position * 10).to_f / 100) * (@base_temperature))
+  def current_temp
+    `redshift -p`[/\d+K/].tr('K', '').to_i
   end
 
-  def set_temperature temperature
-    `redshift -P -O #{temperature}` rescue Errno::ENOENT abort '[!] Redshift is not installed.'
+  def set_temperature
+    @temperature = ((@position * 10).to_f / 100) * @base_temperature
+    `redshift -P -O #@temperature` rescue Errno::ENOENT abort '[!] Redshift is not installed.'
   end
 
   def set_position input
@@ -123,4 +126,4 @@ class Redshift
   end
 end
 
-Redshift.new
+Dimshift.new
