@@ -1,0 +1,26 @@
+* dimshift
+
+  Tool for tweaking redshift's temperature intensity
+
+  [[./screenshots/dimshift.png]]
+
+* Installation
+
+  1. Clone this repo into a directory of your choice: ~git clone https://github.com/0-l/dimshift && cd dimshift~
+  2. Run ~sudo sh install.sh~
+
+* Usage
+
+  1. Call ~dimshift~
+  2. Use the keybindings to increase/decrease the intensity: =h= (decrease), =l= (increase)
+  3. =q= to quit
+
+  Alternatively, for /i3/ users we can bind =mod + t=, for instance, to spawn dimshift:
+
+  ~bindsym $mod + t exec urxvt -name float -e dimshift~
+
+  Obs: replace =urxvt= with your terminal emulator of choice.
+
+* Uninstalling
+
+  Simply run ~sudo sh uninstall.sh~ to uninstall dimshift.
